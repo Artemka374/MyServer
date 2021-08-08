@@ -68,7 +68,7 @@ If success it returns status 200 and body:
 as a result of success you will receive status 200 and body:
 ```json
 {
-   "ID": "unique file ID"
+   "ID": "unique file ID",
    "name": "file_name.ext",
    "text" : "text"
 }
@@ -82,22 +82,24 @@ Here:
 
 Example of result:
 ```json
-{
-   {
-      "id": "ID1",
-      "name": "note1",
-      "text": "abc"
-   },
-   {
-      "id": "ID2",
-      "name": "note2",
-      "size": "def"
-   },
-   {
-      "id": "ID3",
-      "name": "note3",
-      "size": "ghi"
-   }
+{  
+   "page": [
+      {
+         "id": "ID1",
+         "name": "note1",
+         "text": "abc"
+      },
+      {
+         "id": "ID2",
+         "name": "note2",
+         "size": "def"
+      },
+      {
+         "id": "ID3",
+         "name": "note3",
+         "size": "ghi"
+      }
+   ]
 }
 
 ```

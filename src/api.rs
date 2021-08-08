@@ -3,6 +3,7 @@ use crate::server_error::ServerError;
 use crate::CurrPgPool;
 use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use serde_json::json;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize)]
@@ -55,7 +56,7 @@ pub async fn pagination(
 
     let notes = db::filter(&mut conn, page, size, q.clone()).await?;
 
-    Ok(HttpResponse::Ok().json(notes))
+    Ok(HttpResponse::Ok().json(json!({"page": notes})))
 }
 
 #[post("/notes")]

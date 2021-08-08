@@ -19,11 +19,11 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .data(CurrPgPool { pool: pool.clone() })
-            .service(routes::find)
-            .service(routes::delete)
-            .service(routes::update)
-            .service(routes::create)
-            .service(routes::pagination)
+            .service(api::find)
+            .service(api::delete)
+            .service(api::update)
+            .service(api::create)
+            .service(api::pagination)
     })
     .bind("127.0.0.1:8000")?
     .run()
