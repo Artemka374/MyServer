@@ -2,8 +2,8 @@ use actix_web::{App, HttpServer};
 use dotenv::dotenv;
 use sqlx;
 use sqlx::postgres::PgPool;
+mod api;
 mod db;
-mod routes;
 mod server_error;
 
 pub struct CurrPgPool {

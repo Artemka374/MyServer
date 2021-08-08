@@ -1,7 +1,8 @@
+use crate::api::NoteQuery;
 use crate::server_error::ServerError;
-use sqlx::postgres::PgPool;
 use serde::{Deserialize, Serialize};
 use sqlx;
+use sqlx::postgres::PgPool;
 use std::env;
 
 pub type PoolConn = sqlx::pool::PoolConnection<sqlx::Postgres>;
@@ -9,12 +10,6 @@ pub type PoolConn = sqlx::pool::PoolConnection<sqlx::Postgres>;
 #[derive(Serialize, Deserialize)]
 pub struct Note {
     pub id: i32,
-    pub name: String,
-    pub text: String,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct Request {
     pub name: String,
     pub text: String,
 }
@@ -31,7 +26,7 @@ pub async fn init() -> Result<PgPool, ServerError> {
     Ok(pool)
 }
 
-pub async fn create(conn: &mut PoolConn, note: Request) -> Result<i32, ServerError> {
+pub async fn create(conn: &mut PoolConn, note: NoteQuery) -> Result<i32, ServerError> {
     let id = sqlx::query!(
         r#"
         INSERT INTO notes (name, text) VALUES ($1, $2)
@@ -51,12 +46,11 @@ pub async fn filter(
     size: usize,
     q: String,
 ) -> Result<Vec<Note>, ServerError> {
-
     let mut query_str = "%".to_owned();
     query_str.push_str(q.as_str());
     query_str.push_str("%");
 
-    let offset: i64 = (page*size) as i64;
+    let offset: i64 = (page * size) as i64;
     let limit: i64 = size as i64;
 
     let curr = sqlx::query!(
@@ -101,7 +95,11 @@ pub async fn delete(conn: &mut PoolConn, id: i32) -> Result<i32, ServerError> {
     Ok(id.id)
 }
 
-pub async fn update(conn: &mut PoolConn, id: i32, note: Request) -> Result<i32, ServerError> {
+pub async fn update(
+    conn: &mut PoolConn,
+    id: i32,
+    note: NoteQuery,
+) -> Result<i32, ServerError> {
     let id = sqlx::query!(
         r#"
         UPDATE notes
