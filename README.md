@@ -15,9 +15,15 @@ Project created with:
 
 ## Usage
 ### How to build
-`sudo -i -u postgres`
-`createdb my_db`
-`psql -d my_db`
+```
+sudo -i -u postgres
+```
+```
+createdb my_db
+```
+```
+psql -d my_db
+```
 ```
 CREATE TABLE notes(
    id SERIAL PRIMARY KEY,
