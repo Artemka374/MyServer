@@ -3,7 +3,7 @@ use dotenv::dotenv;
 use sqlx;
 use sqlx::postgres::PgPool;
 mod db;
-mod public_api;
+mod routes;
 mod server_error;
 
 pub struct CurrPgPool {
@@ -19,11 +19,11 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .data(CurrPgPool { pool: pool.clone() })
-            .service(public_api::find)
-            .service(public_api::delete)
-            .service(public_api::update)
-            .service(public_api::create)
-            .service(public_api::pagination)
+            .service(routes::find)
+            .service(routes::delete)
+            .service(routes::update)
+            .service(routes::create)
+            .service(routes::pagination)
     })
     .bind("127.0.0.1:8000")?
     .run()
