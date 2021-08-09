@@ -8,6 +8,8 @@ Application that allows store notes' names and text in the cloud and search thro
 ## Technologies
 Project created with:
 * Rust
+* sqlx
+* actix
 
 ## Requirements
 * Postgres
@@ -33,7 +35,8 @@ CREATE TABLE notes(
 ```
 ### Start
 `cargo run`
-
+### Host and port
+You should send requests on 127.0.0.1:8000
 ### Endpoints
 The program designed as a rest api.
 #### Upload

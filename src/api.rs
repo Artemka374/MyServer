@@ -43,7 +43,9 @@ pub async fn pagination(
     params
         .entry(String::from("size"))
         .or_insert(String::from("10"));
-    params.entry(String::from("q")).or_insert(String::new());
+    params
+        .entry(String::from("q"))
+        .or_insert(String::new());
 
     let page = params.get(&String::from("page")).unwrap();
     let size = params.get(&String::from("size")).unwrap();

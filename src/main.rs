@@ -1,7 +1,7 @@
 use actix_web::{App, HttpServer};
 use dotenv::dotenv;
-use sqlx;
 use sqlx::postgres::PgPool;
+
 mod api;
 mod db;
 mod server_error;

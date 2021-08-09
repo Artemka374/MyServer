@@ -17,7 +17,7 @@ pub struct Note {
 pub async fn connection(pool: &PgPool) -> Result<PoolConn, ServerError> {
     PgPool::acquire(pool)
         .await
-        .map_err(|e| ServerError::new(500, format!("Failed getting db connection: {}", e)))
+        .map_err(|e| ServerError::new(500, format!("Failed getting database connection: {}", e)))
 }
 
 pub async fn init() -> Result<PgPool, ServerError> {
