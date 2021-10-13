@@ -95,12 +95,12 @@ Example of result:
       {
          "id": "ID2",
          "name": "note2",
-         "size": "def"
+         "text": "def"
       },
       {
          "id": "ID3",
          "name": "note3",
-         "size": "ghi"
+         "text": "ghi"
       }
    ]
 }
