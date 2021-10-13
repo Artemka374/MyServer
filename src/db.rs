@@ -27,7 +27,7 @@ pub async fn init() -> Result<PgPool, ServerError> {
 }
 
 pub async fn create(conn: &mut PoolConn, note: NoteQuery) -> Result<i32, ServerError> {
-    let id = sqlx::query!(
+    let sql_response = sqlx::query!(
         r#"
         INSERT INTO notes (name, text) VALUES ($1, $2)
         RETURNING id"#,
@@ -37,7 +37,7 @@ pub async fn create(conn: &mut PoolConn, note: NoteQuery) -> Result<i32, ServerE
     .fetch_one(conn)
     .await?;
 
-    Ok(id.id)
+    Ok(sql_response.id)
 }
 
 pub async fn filter(
@@ -53,7 +53,7 @@ pub async fn filter(
     let offset: i64 = (page * size) as i64;
     let limit: i64 = size as i64;
 
-    let curr = sqlx::query!(
+    let sql_response = sqlx::query!(
         r#"
             SELECT id, name, text
             FROM notes
@@ -69,21 +69,21 @@ pub async fn filter(
     .fetch_all(conn)
     .await?;
 
-    let mut ans = Vec::new();
+    let mut result = Vec::new();
 
-    for i in 0..curr.len() {
-        ans.push(Note {
-            id: curr.get(i).unwrap().id,
-            name: curr.get(i).unwrap().name.clone(),
-            text: curr.get(i).unwrap().text.clone(),
+    for i in 0..sql_response.len() {
+        result.push(Note {
+            id: sql_response.get(i).unwrap().id,
+            name: sql_response.get(i).unwrap().name.clone(),
+            text: sql_response.get(i).unwrap().text.clone(),
         });
     }
 
-    Ok(ans)
+    Ok(result)
 }
 
 pub async fn delete(conn: &mut PoolConn, id: i32) -> Result<i32, ServerError> {
-    let id = sqlx::query!(
+    let sql_response = sqlx::query!(
         r#"
         DELETE FROM notes
         WHERE id = $1
@@ -92,7 +92,7 @@ pub async fn delete(conn: &mut PoolConn, id: i32) -> Result<i32, ServerError> {
     )
     .fetch_one(conn)
     .await?;
-    Ok(id.id)
+    Ok(sql_response.id)
 }
 
 pub async fn update(
@@ -100,7 +100,7 @@ pub async fn update(
     id: i32,
     note: NoteQuery,
 ) -> Result<i32, ServerError> {
-    let id = sqlx::query!(
+    let sql_response = sqlx::query!(
         r#"
         UPDATE notes
         SET (name, text) = ($1, $2)
@@ -113,11 +113,11 @@ pub async fn update(
     .fetch_one(conn)
     .await?;
 
-    Ok(id.id)
+    Ok(sql_response.id)
 }
 
 pub async fn find(conn: &mut PoolConn, id: i32) -> Result<Note, ServerError> {
-    let note = sqlx::query!(
+    let sql_response = sqlx::query!(
         r#"
         SELECT name, text
         FROM notes
@@ -128,7 +128,7 @@ pub async fn find(conn: &mut PoolConn, id: i32) -> Result<Note, ServerError> {
     .await?;
     Ok(Note {
         id,
-        name: note.name,
-        text: note.text,
+        name: sql_response.name,
+        text: sql_response.text,
     })
 }

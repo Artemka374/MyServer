@@ -1,6 +1,6 @@
 use crate::db;
 use crate::server_error::ServerError;
-use crate::CurrPgPool;
+use crate::PgPoolData;
 use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use serde_json::json;
 use serde::{Deserialize, Serialize};
@@ -14,7 +14,7 @@ pub struct NoteQuery {
 
 #[get("/notes/{id}")]
 pub async fn find(
-    db: web::Data<CurrPgPool>,
+    db: web::Data<PgPoolData>,
     id: web::Path<i32>,
 ) -> Result<HttpResponse, ServerError> {
     let mut conn = db::connection(&db.pool).await?;
@@ -24,7 +24,7 @@ pub async fn find(
 
 #[get("/notes")]
 pub async fn pagination(
-    db: web::Data<CurrPgPool>,
+    db: web::Data<PgPoolData>,
     req: HttpRequest,
 ) -> Result<HttpResponse, ServerError> {
     let req = Some(req.query_string());
@@ -63,7 +63,7 @@ pub async fn pagination(
 
 #[post("/notes")]
 pub async fn create(
-    db: web::Data<CurrPgPool>,
+    db: web::Data<PgPoolData>,
     note: web::Json<NoteQuery>,
 ) -> Result<HttpResponse, ServerError> {
     let mut conn = db::connection(&db.pool).await?;
@@ -73,7 +73,7 @@ pub async fn create(
 
 #[put("/notes/{id}")]
 pub async fn update(
-    db: web::Data<CurrPgPool>,
+    db: web::Data<PgPoolData>,
     id: web::Path<i32>,
     note: web::Json<NoteQuery>,
 ) -> Result<HttpResponse, ServerError> {
@@ -84,7 +84,7 @@ pub async fn update(
 
 #[delete("/notes/{id}")]
 pub async fn delete(
-    db: web::Data<CurrPgPool>,
+    db: web::Data<PgPoolData>,
     id: web::Path<i32>,
 ) -> Result<HttpResponse, ServerError> {
     let mut conn = db::connection(&db.pool).await?;

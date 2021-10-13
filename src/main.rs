@@ -6,7 +6,7 @@ mod api;
 mod db;
 mod server_error;
 
-pub struct CurrPgPool {
+pub struct PgPoolData {
     pub pool: PgPool,
 }
 
@@ -18,7 +18,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .data(CurrPgPool { pool: pool.clone() })
+            .data(PgPoolData { pool: pool.clone() })
             .service(api::find)
             .service(api::delete)
             .service(api::update)
